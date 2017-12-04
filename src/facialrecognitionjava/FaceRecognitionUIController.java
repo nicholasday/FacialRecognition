@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -40,8 +39,6 @@ public class FaceRecognitionUIController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.currentFrame = new ImageView();
-        
         this.capture.open(cameraId);
         
         if (this.capture.isOpened()) {
@@ -52,10 +49,7 @@ public class FaceRecognitionUIController implements Initializable {
                     MatOfByte buffer = new MatOfByte();
                     Imgcodecs.imencode(".png", frame, buffer);
                     Image imageToShow = new Image(new ByteArrayInputStream(buffer.toArray()));
-                    Platform.runLater(() -> {
-			currentFrame.imageProperty().set(imageToShow);
-                    });
-		  
+                    currentFrame.setImage(imageToShow);		  
 		}
             };
 				
@@ -71,7 +65,7 @@ public class FaceRecognitionUIController implements Initializable {
             try {
 		this.capture.read(frame);
                 if (!frame.empty()) {
-                    //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 		}
             } catch (Exception e) {
 		System.err.println("Exception during the image elaboration: " + e);
