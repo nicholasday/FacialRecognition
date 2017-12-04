@@ -40,6 +40,8 @@ public class FaceRecognitionUIController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.currentFrame = new ImageView();
+        
         this.capture.open(cameraId);
         
         if (this.capture.isOpened()) {
