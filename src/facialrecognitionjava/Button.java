@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package facialrecognitionjava;
-
-import org.opencv.core.Mat;
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
 
 /**
  *
@@ -13,22 +13,34 @@ import org.opencv.core.Mat;
  */
 public class Button {
     
-    private int x, y, width, height;
+    private double x, y, width, height;
     private String text;
+    private Scalar color;
     
-    public Button(int x, int y, String text, int width, int height) {
+    public Button(double x, double y, String text, double width, double height, Scalar color) {
         this.x = x;
         this.y = y;
         this.text = text;
         this.width = width;
         this.height = height;
+        this.color = color;
     }
     
-    public void draw(Mat mat) {
-        
+    public Mat draw(Mat mat) {        
+        Imgproc.rectangle(mat, new Point(this.x, this.y), new Point(this.x + this.width, this.y + this.height), color);
+        return mat;
     }
 
-    public int getX() {
+    public boolean isColliding(double clickX, double clickY) {
+    
+        if ((this.x < clickX && clickX < (this.x + this.width)) && (this.y < clickY && clickY < (this.y + this.height))) {
+            return true;
+        }
+        return false;
+        
+    }
+    
+    public double getX() {
         return x;
     }
 
@@ -36,7 +48,7 @@ public class Button {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -44,7 +56,7 @@ public class Button {
         this.y = y;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
@@ -52,7 +64,7 @@ public class Button {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
@@ -68,5 +80,12 @@ public class Button {
         this.text = text;
     }
     
+    public Scalar getColor() {
+        return color;
+    }
+    
+    public void setColor(Scalar color) {
+        this.color = color;
+    }
     
 }
