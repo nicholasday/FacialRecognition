@@ -6,7 +6,9 @@
 
 package facialrecognitionjava;
 
-
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -46,12 +48,7 @@ public class FacialRecognitionJava extends Application {
         } 
         System.out.println(System.getProperty("os.name"));
 
-<<<<<<< HEAD
-        Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
-        System.out.println("mat = " + mat.dump());
-=======
         launch(args);
->>>>>>> 4381c5a387b3e8008547ca9849b5fd4a2aef2462
     }
     
 }

@@ -17,6 +17,10 @@ public class Label {
     private int size;
     
     public Label(double x, double y, String text, Scalar color, int size) {
-        
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+        this.size = size;
     }
 }
