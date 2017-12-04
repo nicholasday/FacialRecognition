@@ -40,6 +40,8 @@ public class FaceRecognitionUIController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.currentFrame = new ImageView();
+        
         this.capture.open(cameraId);
         
         if (this.capture.isOpened()) {
@@ -50,10 +52,10 @@ public class FaceRecognitionUIController implements Initializable {
                     MatOfByte buffer = new MatOfByte();
                     Imgcodecs.imencode(".png", frame, buffer);
                     Image imageToShow = new Image(new ByteArrayInputStream(buffer.toArray()));
-                    Platform.runLater(new Runnable() {
-                        @Override public void run() { currentFrame.setImage(imageToShow); }
+                    Platform.runLater(() -> {
+			currentFrame.imageProperty().set(imageToShow);
                     });
-		    //updateImageView(currentFrame, imageToShow);
+		  
 		}
             };
 				
@@ -69,7 +71,7 @@ public class FaceRecognitionUIController implements Initializable {
             try {
 		this.capture.read(frame);
                 if (!frame.empty()) {
-                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                    //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 		}
             } catch (Exception e) {
 		System.err.println("Exception during the image elaboration: " + e);
@@ -78,28 +80,4 @@ public class FaceRecognitionUIController implements Initializable {
 		
         return frame;
     }
-	
-    private void stopAcquisition() {
-	if (this.timer != null && !this.timer.isShutdown()) {
-            try {
-		this.timer.shutdown();
-		this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
-            }
-        }
-	
-        if (this.capture.isOpened()) {
-            this.capture.release();
-	}
-    }
-	
-    private void updateImageView(ImageView view, Image image) {
-	//Utils.onFXThread(view.imageProperty(), image);
-    }
-
-    protected void setClosed() {
-        this.stopAcquisition();
-    }
-    
 }
