@@ -6,17 +6,29 @@
 
 package facialrecognitionjava;
 
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
 
 import java.io.File;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
  * @author nicholas
  */
-public class FacialRecognitionJava {
+public class FacialRecognitionJava extends Application {
+    
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("FaceRecognitionUI.fxml"));
+        
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        stage.show();
+    }
 
     /**
      * @param args the command line arguments
@@ -34,9 +46,7 @@ public class FacialRecognitionJava {
         } 
         System.out.println(System.getProperty("os.name"));
 
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
-        System.out.println("mat = " + mat.dump());
+        launch(args);
     }
     
 }
