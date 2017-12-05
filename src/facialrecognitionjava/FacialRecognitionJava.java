@@ -47,6 +47,7 @@ public class FacialRecognitionJava extends Application {
             System.load(lib.getAbsolutePath());
         } 
         System.out.println(System.getProperty("os.name"));
+        Trainer.getAverageFace();
 
         launch(args);
     }
