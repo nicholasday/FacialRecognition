@@ -34,6 +34,7 @@ import org.opencv.objdetect.CascadeClassifier;
  *
  * @author nicholas
  */
+//UI controller to show processed OpenCV mat on JavaFX scene after capturing video
 public class FaceRecognitionUIController implements Initializable {
     @FXML
     private ImageView currentFrame;
@@ -49,6 +50,7 @@ public class FaceRecognitionUIController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.capture.open(cameraId);
         
+        //runnable updates ImageView with frames grabbed from camera
         if (this.capture.isOpened()) {
             Runnable frameGrabber = new Runnable() {		
                 @Override
@@ -66,16 +68,20 @@ public class FaceRecognitionUIController implements Initializable {
         }
     }   
     
+    //grabs frame from camera
     private Mat grabFrame() {
 	Mat frame = new Mat(); 	
 	
 	if (this.capture.isOpened()) {
             try {
 		this.capture.read(frame);
+                //processing for image, such as adding buttons, changing color, or other OpenCV operations
                 if (!frame.empty()) {
+                    //find faces in frame and draw rectangle around them
                     frame = showFaces(frame);
-                    
-                    //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                    //draw button
+                    Button b1 = new Button(100, 100, "Button", 400, 150, new Scalar(0, 255, 0));
+                    frame = b1.draw(frame);
 		}
             } catch (Exception e) {
 		System.err.println("Exception during the image elaboration: " + e);
@@ -85,12 +91,11 @@ public class FaceRecognitionUIController implements Initializable {
         return frame;
     }
     
+    //uses OpenCV Haar cascades to detect faces in frame and draw rectangle around them
     public Mat showFaces(Mat img) {
         Mat gray = new Mat();
         Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
-        System.out.println("i");
         CascadeClassifier faceDetector = new CascadeClassifier(getClass().getClassLoader().getResource("resources/lbpcascade_frontalface.xml").getPath());
-        System.out.println("j");
         MatOfRect faceDetections = new MatOfRect();
         faceDetector.detectMultiScale(img, faceDetections);
 
@@ -104,19 +109,18 @@ public class FaceRecognitionUIController implements Initializable {
         return img;
     }
     
+    //uses OpenCV Haar cascades to detect faces in frame and crop image around them for further processing
     public Mat showCroppedFace(Mat img) {
         Mat gray = new Mat();
         Mat cropped = new Mat();
         Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
-        System.out.println("i");
         CascadeClassifier faceDetector = new CascadeClassifier(getClass().getClassLoader().getResource("resources/lbpcascade_frontalface.xml").getPath());
-        System.out.println("j");
         MatOfRect faceDetections = new MatOfRect();
         faceDetector.detectMultiScale(img, faceDetections);
 
         System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
 
-        // Draw a bounding box around each face.
+        //cropping face
         for (Rect rect : faceDetections.toArray()) {
              cropped = img.submat(new Rect(rect.x - 1, rect.y - 1, rect.x + rect.width + 1, rect.y + rect.height + 1));
 

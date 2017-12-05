@@ -28,6 +28,7 @@ public class Button {
     
     public Mat draw(Mat mat) {        
         Imgproc.rectangle(mat, new Point(this.x, this.y), new Point(this.x + this.width, this.y + this.height), color);
+        Imgproc.putText(mat, text, new Point(this.x + 10, this.y + this.height - 10), 3, 3, new Scalar(255, 255, 255));
         return mat;
     }
 
