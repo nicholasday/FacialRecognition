@@ -19,7 +19,15 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.highgui.Highgui;
+import org.opencv.core.Core;
+import org.opencv.objdetect.CascadeClassifier;
 
 /**
  * FXML Controller class
@@ -59,13 +67,15 @@ public class FaceRecognitionUIController implements Initializable {
     }   
     
     private Mat grabFrame() {
-	Mat frame = new Mat();
-		
+	Mat frame = new Mat(); 	
+	
 	if (this.capture.isOpened()) {
             try {
 		this.capture.read(frame);
                 if (!frame.empty()) {
-                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                    frame = showFaces(frame);
+                    
+                    //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 		}
             } catch (Exception e) {
 		System.err.println("Exception during the image elaboration: " + e);
@@ -73,5 +83,45 @@ public class FaceRecognitionUIController implements Initializable {
 	}
 		
         return frame;
+    }
+    
+    public Mat showFaces(Mat img) {
+        Mat gray = new Mat();
+        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
+        System.out.println("i");
+        CascadeClassifier faceDetector = new CascadeClassifier(getClass().getClassLoader().getResource("resources/lbpcascade_frontalface.xml").getPath());
+        System.out.println("j");
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(img, faceDetections);
+
+        System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
+
+        // Draw a bounding box around each face.
+        for (Rect rect : faceDetections.toArray()) {
+            Imgproc.rectangle(img, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0));
+        }
+
+        return img;
+    }
+    
+    public Mat showCroppedFace(Mat img) {
+        Mat gray = new Mat();
+        Mat cropped = new Mat();
+        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
+        System.out.println("i");
+        CascadeClassifier faceDetector = new CascadeClassifier(getClass().getClassLoader().getResource("resources/lbpcascade_frontalface.xml").getPath());
+        System.out.println("j");
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(img, faceDetections);
+
+        System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
+
+        // Draw a bounding box around each face.
+        for (Rect rect : faceDetections.toArray()) {
+             cropped = img.submat(new Rect(rect.x - 1, rect.y - 1, rect.x + rect.width + 1, rect.y + rect.height + 1));
+
+        }
+
+        return cropped;
     }
 }
