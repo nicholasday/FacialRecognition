@@ -17,7 +17,16 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author nicholas
  */
+
+/*
+ * Trainer has the functionality to get the average face over the face database, 
+ * and will convert the face database to a matrix of ratios in face space.
+ */
 public class Trainer {
+    
+    // Converts all of the faces in the project to OpenCV Mats and accumulates them.
+    // Afterward, it computers the average of those faces and saves it as test.png
+    // in the project root.
     public static void getAverageFace() {
         File[] currentDirectory = new File("./faces").listFiles();
         Mat sum = new Mat(200, 180, CvType.CV_64FC1);
