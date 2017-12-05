@@ -9,6 +9,8 @@ package facialrecognitionjava;
  *
  * @author moham
  */
+
+//class to implement EigenFaces algorithm to recognize faces
 public class FaceRecognizer implements Recognizer{
 
     @Override

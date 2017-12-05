@@ -11,12 +11,15 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author moham
  */
+
+//class for drawing buttons onto our OpenCV Mats
 public class Button {
     
     private double x, y, width, height;
     private String text;
     private Scalar color;
     
+    //button constructor
     public Button(double x, double y, String text, double width, double height, Scalar color) {
         this.x = x;
         this.y = y;
@@ -26,12 +29,14 @@ public class Button {
         this.color = color;
     }
     
+    //draws button with text
     public Mat draw(Mat mat) {        
         Imgproc.rectangle(mat, new Point(this.x, this.y), new Point(this.x + this.width, this.y + this.height), color);
         Imgproc.putText(mat, text, new Point(this.x + 10, this.y + this.height - 10), 3, 3, new Scalar(255, 255, 255));
         return mat;
     }
 
+    //uses click information from JavaFX to return boolean of whether button was clicked or not
     public boolean isColliding(double clickX, double clickY) {
     
         if ((this.x < clickX && clickX < (this.x + this.width)) && (this.y < clickY && clickY < (this.y + this.height))) {

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
  */
 public class FacialRecognitionJava extends Application {
     
+    //setup our GUI
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FaceRecognitionUI.fxml"));
@@ -36,6 +37,7 @@ public class FacialRecognitionJava extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        //Making OpenCV work in Java and adding safeties for different Operating systems
         String os = System.getProperty("os.name");
         if (os.toUpperCase().contains("LINUX")) {
             File lib = new File("libs/" + System.mapLibraryName("opencv_java331"));     
@@ -45,8 +47,12 @@ public class FacialRecognitionJava extends Application {
             File lib = new File("libs/" + System.mapLibraryName("opencv_java331"));     
             System.out.println(lib.getAbsolutePath());
             System.load(lib.getAbsolutePath());
+        } else if (os.toUpperCase().contains("WINDOWS")) {
+            File lib = new File("libs/" + System.mapLibraryName("opencv_java331"));     
+            System.out.println(lib.getAbsolutePath());
+            System.load(lib.getAbsolutePath());
         } 
-        System.out.println(System.getProperty("os.name"));
+        
         Trainer.getAverageFace();
 
         launch(args);

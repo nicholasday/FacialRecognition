@@ -10,18 +10,26 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author moham
  */
+//class for drawing labels onto OpenCV Mats
 public class Label {
     private double x, y;
     private String text;
     private Scalar color;
     private int size;
     
+    //label constructor
     public Label(double x, double y, String text, Scalar color, int size) {
         this.x = x;
         this.y = y;
         this.text = text;
         this.color = color;
         this.size = size;
+    }
+    
+    //draws label onto Mat
+    public Mat draw(Mat mat) {        
+        Imgproc.putText(mat, text, new Point(this.x, this.y), 3, 3, new Scalar(255, 255, 255));
+        return mat;
     }
     
      public double getX() {
